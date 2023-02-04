@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">FilmsApp</string>
+    <string name="popular_title">Popular</string>
+    <string name="favourite_title">Favourite</string>
+    <string name="internet_error_text">An error occurred during data download, check network connection</string>
+    <string name="loading_text">Please, stay tuned, we are hunting on films</string>
+    <string name="genres_title">Genres</string>
+    <string name="countries_title">Countries</string>
+</resources>
