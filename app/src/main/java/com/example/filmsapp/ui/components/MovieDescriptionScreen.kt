@@ -37,13 +37,13 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 fun MovieDescription(
     modifier: Modifier = Modifier,
     movie: Movie,
-    navigatedFrom: Screen = Screen.Popular,
-    onBackPressed:(Screen) -> Unit
+    navigatedFrom: Screen = Screen.Popular(),
+    onBackPressed:(from: Screen, current: Screen) -> Unit
 ){
     val scrollState = rememberScrollState()
     BackHandler(
         enabled = true,
-        onBack = { onBackPressed(navigatedFrom) }
+        onBack = { onBackPressed(navigatedFrom, Screen.Info(movie, navigatedFrom)) }
     )
     Box(modifier = Modifier.fillMaxSize()
     ){
@@ -87,7 +87,7 @@ fun MovieDescription(
             modifier = Modifier
                 .offset(x = 6.dp, y = 40.dp)
                 .scale(1.2f),
-            onClick = { onBackPressed(navigatedFrom) }
+            onClick = { onBackPressed(navigatedFrom, Screen.Info(movie,navigatedFrom)) }
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_back_arrow),
@@ -127,6 +127,6 @@ fun PointWithList(
 fun MovieDescriptionPreview(){
   MovieDescription(
       movie = SampleUiData.getMovieCard(LocalContext.current),
-      onBackPressed = {}
+      onBackPressed = {_,_ ->}
   )
 }

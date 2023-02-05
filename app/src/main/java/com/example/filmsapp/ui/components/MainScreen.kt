@@ -86,7 +86,7 @@ fun MainFooter(
                 .weight(weight = 1.0f),
             text = stringResource(id = R.string.popular_title),
             isChoosen = screen is Screen.Popular,
-            onClicked = { onClicked(Screen.Popular) }
+            onClicked = { onClicked(Screen.Popular()) }
         )
         Spacer(modifier = Modifier.width(14.dp))
         BlueToggleButton(
@@ -94,7 +94,7 @@ fun MainFooter(
                 .weight(weight = 1.0f),
             text = stringResource(id = R.string.favourite_title),
             isChoosen = screen is Screen.Favourites,
-            onClicked = { onClicked(Screen.Favourites) }
+            onClicked = { onClicked(Screen.Favourites()) }
         )
     }
 }
@@ -103,7 +103,7 @@ fun MainFooter(
 @Composable
 fun MainFooterPreview(){
     MainFooter(
-        screen = Screen.Popular,
+        screen = Screen.Popular(),
         onClicked = {},
     )
 }
@@ -118,11 +118,11 @@ fun MainHeader(){
 }
 
 sealed interface Screen {
-    object Favourites: Screen
-    object Popular: Screen
+    data class Favourites(var fromInfo: Boolean = true): Screen
+    data class Popular(var fromInfo: Boolean = true): Screen
     data class Loading(val from: Screen? = null): Screen
     data class Error(val errorOnScreen: Screen = Loading()): Screen
-    data class Info(val movie: Movie, val from: Screen = Popular): Screen
+    data class Info(val movie: Movie, val from: Screen = Popular()): Screen
 }
 
 

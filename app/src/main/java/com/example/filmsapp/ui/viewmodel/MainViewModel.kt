@@ -20,15 +20,21 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val movieRepository: MovieRepository
 ): ViewModel() {
-    private val currentScreen: MutableStateFlow<Screen> = MutableStateFlow(Screen.Popular)
+    private val currentScreen: MutableStateFlow<Screen> = MutableStateFlow(Screen.Popular())
     val state: StateFlow<MainScreenState> =
         movieRepository
             .getPopularFilms()
             .combineTransform(currentScreen){ result, screen ->
                 when {
                     result is DataResult.Error -> { emit(MainScreenState.NoConnection()) }
-                    screen is Screen.Popular -> {  emit(MainScreenState.Popular(movies = result.data as List<Movie>))}
-                    screen is Screen.Favourites -> {  emit(MainScreenState.Favourites(movies = (result.data as List<Movie>).filter { it.isFavourite }))}
+                    screen is Screen.Popular -> {
+                        emit(MainScreenState.Popular(movies = result.data as List<Movie>,  fromInfo = screen.fromInfo))
+                        screen.fromInfo = true
+                    }
+                    screen is Screen.Favourites -> {
+                        emit(MainScreenState.Favourites(movies = (result.data as List<Movie>).filter { it.isFavourite }, fromInfo = screen.fromInfo))
+                        screen.fromInfo = true
+                    }
                     screen is Screen.Info -> {  emit(MainScreenState.MovieInfo(screen.movie, screen.from))}
                     screen is Screen.Loading -> { emit(MainScreenState.StillLoading())}
                 }
@@ -36,7 +42,12 @@ class MainViewModel @Inject constructor(
             .stateIn(viewModelScope, SharingStarted.Lazily, MainScreenState.StillLoading())
 
     fun changePage(screen: Screen){
-        currentScreen.value = screen
+        if(screen is Screen.Favourites || screen is Screen.Popular){
+            currentScreen.value = screen.apply {
+                if (this is Screen.Favourites) fromInfo  = false
+                if (this is Screen.Popular) fromInfo  = false
+            }
+        }
     }
 
     fun showCardInfo(movie: Movie){
@@ -61,10 +72,14 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun navigateBackTo(from : Screen, activity: Activity){
+    fun navigateBackTo(from : Screen, current: Screen, activity: Activity){
         when(from){
-            is Screen.Popular,
-            is Screen.Favourites -> {currentScreen.value = from}
+            is Screen.Popular -> {currentScreen.value = from.apply {
+                if(current is Screen.Info) fromInfo = true
+            }}
+            is Screen.Favourites -> {currentScreen.value = from.apply {
+                if(current is Screen.Info) fromInfo = true
+            }}
             is Screen.Error -> { activity.finish() }
             else -> {}
         }
@@ -81,7 +96,7 @@ class MainViewModel @Inject constructor(
 sealed class MainScreenState(val destination: String){
     data class NoConnection(@StringRes val text: Int = R.string.internet_error_text): MainScreenState(ScreensDestination.noConnection)
     data class StillLoading(@StringRes val text: Int = R.string.loading_text, val from: Screen? = null): MainScreenState(ScreensDestination.loading)
-    data class Favourites(@StringRes val title: Int  = R.string.favourite_title, val movies: List<Movie>, var error: Boolean = false): MainScreenState(ScreensDestination.favourites)
-    data class Popular(@StringRes val title: Int = R.string.popular_title, val movies: List<Movie>, var error: Boolean = false): MainScreenState(ScreensDestination.popular)
+    data class Favourites(@StringRes val title: Int  = R.string.favourite_title, val movies: List<Movie>, var error: Boolean = false, val fromInfo: Boolean = false): MainScreenState(ScreensDestination.favourites)
+    data class Popular(@StringRes val title: Int = R.string.popular_title, val movies: List<Movie>, var error: Boolean = false,val fromInfo: Boolean = false): MainScreenState(ScreensDestination.popular)
     data class MovieInfo(val movie: Movie, val from: Screen): MainScreenState(ScreensDestination.info)
 }

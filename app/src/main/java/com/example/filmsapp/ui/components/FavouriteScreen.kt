@@ -31,7 +31,7 @@ fun FavouriteScreen(
     MainScreen(
         modifier = modifier,
         header = { MainHeader(title = stringResource(id = R.string.favourite_title), onClicked = onSearchClicked)},
-        footer = {MainFooter(modifier = Modifier.padding(top = 10.dp), screen = Screen.Favourites, onClicked = onBottomButtonClicked)})
+        footer = {MainFooter(modifier = Modifier.padding(top = 10.dp), screen = Screen.Favourites(), onClicked = onBottomButtonClicked)})
     {
         LazyColumn(modifier = Modifier.padding(top = 21.dp)){
             items(cards){ card ->

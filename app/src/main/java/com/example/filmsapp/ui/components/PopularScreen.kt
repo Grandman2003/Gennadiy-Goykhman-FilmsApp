@@ -31,7 +31,7 @@ fun PopularScreen(
     MainScreen(
         modifier = modifier,
         header = { MainHeader(title = stringResource(id = R.string.popular_title), onClicked = onSearchClicked)},
-        footer = {MainFooter(modifier = Modifier.padding(top = 10.dp), screen = Screen.Popular, onClicked = onBottomButtonClicked)})
+        footer = {MainFooter(modifier = Modifier.padding(top = 10.dp), screen = Screen.Popular(), onClicked = onBottomButtonClicked)})
     {
         LazyColumn(modifier = Modifier.padding(top = 21.dp)){
             items(cards){ card ->
