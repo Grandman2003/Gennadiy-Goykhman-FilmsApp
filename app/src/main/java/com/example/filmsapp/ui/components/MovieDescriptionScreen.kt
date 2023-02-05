@@ -1,15 +1,20 @@
 package com.example.filmsapp.ui.components
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import com.example.filmsapp.R
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -26,23 +31,30 @@ import com.example.filmsapp.ui.theme.BackgroundBlue
 import com.example.filmsapp.ui.theme.Roboto
 import com.example.filmsapp.ui.theme.TextBlack
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun MovieDescription(
     modifier: Modifier = Modifier,
     movie: Movie,
-    onBackPressed:() -> Unit
+    navigatedFrom: Screen = Screen.Popular,
+    onBackPressed:(Screen) -> Unit
 ){
     val scrollState = rememberScrollState()
-    Box(modifier = Modifier.fillMaxSize()){
+    BackHandler(
+        enabled = true,
+        onBack = { onBackPressed(navigatedFrom) }
+    )
+    Box(modifier = Modifier.fillMaxSize()
+    ){
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .scrollable(scrollState, orientation = Orientation.Vertical)
+                .verticalScroll(scrollState)
         ) {
             Image(
                 modifier = Modifier.fillMaxWidth(),
-                painter = rememberDrawablePainter(drawable = movie.image),
+                painter = BitmapPainter(movie.image.asImageBitmap()),
                 contentDescription = "Film image",
                 contentScale = ContentScale.FillWidth
             )
@@ -68,11 +80,14 @@ fun MovieDescription(
                 PointWithList(title = stringResource(id = R.string.genres_title), list = movie.genres)
                 Spacer(modifier = Modifier.height(8.dp))
                 PointWithList(title = stringResource(id = R.string.countries_title), list = movie.countries)
+                Spacer(modifier = Modifier.height(32.dp))
             }
         }
         IconButton(
-            modifier = Modifier.offset(x = 6.dp, y = 40.dp),
-            onClick = onBackPressed
+            modifier = Modifier
+                .offset(x = 6.dp, y = 40.dp)
+                .scale(1.2f),
+            onClick = { onBackPressed(navigatedFrom) }
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_back_arrow),

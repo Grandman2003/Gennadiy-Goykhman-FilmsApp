@@ -18,7 +18,7 @@ data class MovieDto (
     val countries: List<CountryDto>,
     @field: Json(name = "genres")
     val genres: List<GenreDto>,
-    @field: Json(name = "shortDescription")
+    @field: Json(name = "description")
     val description: String = "",
     @field: Json(name = "year")
     val year: Int,

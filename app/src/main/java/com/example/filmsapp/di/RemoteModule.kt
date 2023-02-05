@@ -1,10 +1,14 @@
 package com.example.filmsapp.di
 
+import android.content.Context
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.example.filmsapp.data.remote.AuthInterceptor
 import com.example.filmsapp.data.remote.MovieApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttp
 import okhttp3.OkHttpClient
@@ -32,4 +36,7 @@ object RemoteModule {
             .addConverterFactory(MoshiConverterFactory.create().asLenient())
             .build()
             .create(MovieApi::class.java)
+
+    @Provides
+    fun provideGlideRequestManager(@ApplicationContext context: Context): RequestManager = Glide.with(context)
 }

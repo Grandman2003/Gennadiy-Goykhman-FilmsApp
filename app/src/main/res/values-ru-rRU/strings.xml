@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FilmsApp</string>
+    <string name="popular_title">Популярное</string>
+    <string name="favourite_title">Избранное</string>
+    <string name="internet_error_text">Ой-йой, во время загрузки произошла ошибка, проверьте своё соединение с сетью</string>
+    <string name="loading_text">Пожалуйста, оствайтесь с нами, мы начали охоту за интересным контентом</string>
+    <string name="genres_title">Жанры</string>
+    <string name="retry_text">Повторить</string>
+    <string name="countries_title">Страны</string>
+</resources>

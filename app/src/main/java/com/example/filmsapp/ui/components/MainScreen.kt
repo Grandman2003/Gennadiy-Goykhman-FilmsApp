@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.filmsapp.R
+import com.example.filmsapp.ui.models.Movie
 import com.example.filmsapp.ui.theme.BackgroundBlue
 import com.example.filmsapp.ui.theme.Roboto
 
@@ -26,7 +27,7 @@ fun MainScreen(
     content: @Composable()() -> Unit,
 ){
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
@@ -119,6 +120,8 @@ fun MainHeader(){
 sealed interface Screen {
     object Favourites: Screen
     object Popular: Screen
+    object Loading: Screen
+    data class Info(val movie: Movie, val from: Screen = Popular): Screen
 }
 
 

@@ -7,6 +7,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,7 +38,7 @@ fun FavouriteScreen(
                     title = card.title,
                     genres = card.genres,
                     year = card.year,
-                    image = rememberDrawablePainter(drawable = card.image),
+                    image = BitmapPainter(card.image.asImageBitmap()),
                     isFavourite = card.isFavourite,
                     onClicked = {onCardClicked(card)}) {
                 }

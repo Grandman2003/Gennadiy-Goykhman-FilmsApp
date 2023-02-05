@@ -1,11 +1,13 @@
 package com.example.filmsapp.ui.models
 
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 
 data class Movie(
+    val id: Int,
     val title: String,
     var description: String = "",
-    val image: Drawable,
+    val image: Bitmap,
     val genres: List<String>,
     val countries: List<String>,
     val year: Int,

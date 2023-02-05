@@ -2,7 +2,6 @@ package com.example.filmsapp.data.remote
 
 import com.example.filmsapp.data.remote.dto.FilmsDto
 import com.example.filmsapp.data.remote.dto.MovieDto
-import com.example.filmsapp.ui.models.Movie
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -18,7 +17,7 @@ interface MovieApi {
     @GET("api/v2.2/films/{id}")
     @AuthToken
     suspend fun getFilmDescription(
-        @Path("id") id: Long
+        @Path("id") id: Int
     ): MovieDto
 }
 
