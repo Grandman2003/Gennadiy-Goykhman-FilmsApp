@@ -130,11 +130,12 @@ fun MovieCard(
 fun InfoDialog(
     modifier: Modifier = Modifier,
     header: @Composable()() -> Unit,
+    onClose: () -> Unit = {},
     description: String,
     isClosable: Boolean,
 ){
         Dialog(
-            onDismissRequest = {},
+            onDismissRequest = onClose,
             properties = DialogProperties(
                 dismissOnBackPress = isClosable,
                 dismissOnClickOutside = isClosable

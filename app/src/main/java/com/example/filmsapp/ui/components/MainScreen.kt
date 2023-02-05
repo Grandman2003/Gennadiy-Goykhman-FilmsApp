@@ -120,7 +120,8 @@ fun MainHeader(){
 sealed interface Screen {
     object Favourites: Screen
     object Popular: Screen
-    object Loading: Screen
+    data class Loading(val from: Screen? = null): Screen
+    data class Error(val errorOnScreen: Screen = Loading()): Screen
     data class Info(val movie: Movie, val from: Screen = Popular): Screen
 }
 

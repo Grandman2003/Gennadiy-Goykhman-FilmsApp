@@ -6,5 +6,6 @@
     <string name="loading_text">Please, stay tuned, we are hunting on films</string>
     <string name="genres_title">Genres</string>
     <string name="retry_text">Retry</string>
+    <string name="film_load_error">We cannot go throw the matrix. Please, check internet connection</string>
     <string name="countries_title">Countries</string>
 </resources>

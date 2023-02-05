@@ -15,5 +15,5 @@ data class MovieEntity(
     @ColumnInfo(name = "description") val description: String? = "",
     @ColumnInfo(name = "countries")  val countries: List<String>,
     @ColumnInfo(name = "genres")  val genres: List<String>,
-    @ColumnInfo(name = "favourite") val isFavourite: Int = 0
+    @ColumnInfo(name = "favourite") var isFavourite: Int = 0
 )

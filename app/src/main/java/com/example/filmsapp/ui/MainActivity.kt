@@ -57,7 +57,8 @@ class MainActivity : ComponentActivity() {
                     screenState = screenState,
                     changePageCallback = { screen -> viewModel.changePage(screen) },
                     onCardClickedCallback = { card -> viewModel.showCardInfo(card)},
-                    onBackClicked = {screen -> viewModel.navigateBackTo(screen)},
+                    onBackClicked = {screen -> viewModel.navigateBackTo(screen, this)},
+                    onLongCardClick = {card -> viewModel.changeFavourite(card)},
                     onRetryClick = { viewModel.retryUpdate() }
                 )
             }
@@ -72,6 +73,7 @@ fun ScreenHolder(
     changePageCallback: (Screen) -> Unit,
     onCardClickedCallback: (Movie) -> Unit,
     onBackClicked: (Screen) -> Unit,
+    onLongCardClick: (Movie) -> Unit,
     onRetryClick: () -> Unit  = {}
 ) {
     when (screenState) {
@@ -88,18 +90,11 @@ fun ScreenHolder(
                             contentDescription = "No connection",
                             contentScale = ContentScale.Fit
                         )
-//                        BlueToggleButton(
-//                            modifier = Modifier
-//                                .fillMaxWidth(fraction = 0.3f)
-//                            ,
-//                            text = stringResource(id = R.string.retry_text),
-//                            onClicked = onRetryClick,
-//                            isChoosen = false
-//                        )
                     }
                 },
                 description = stringResource(id = screenState.text),
-                isClosable = false
+                onClose = { onBackClicked(Screen.Error()) },
+                isClosable = true
             )
         }
         is MainScreenState.StillLoading -> {
@@ -114,27 +109,34 @@ fun ScreenHolder(
                     )
                 },
                 description = stringResource(id = screenState.text),
-                isClosable = false
+                isClosable = screenState.from != null,
+                onClose = { if(screenState.from != null) onBackClicked(screenState.from)}
             )
         }
         is MainScreenState.Popular ->
-            PopularScreen(
-                modifier = modifier
-                    .padding(top = 26.dp, bottom = 48.dp),
-                cards = (screenState as MainScreenState.Popular).movies,
-                onSearchClicked = { },
-                onCardClicked = onCardClickedCallback,
-                onBottomButtonClicked = changePageCallback
-            )
+            Box(modifier = modifier.fillMaxSize()) {
+                PopularScreen(
+                    modifier = modifier
+                        .padding(top = 26.dp, bottom = 48.dp),
+                    cards = (screenState as MainScreenState.Popular).movies,
+                    onSearchClicked = { },
+                    onCardClicked = onCardClickedCallback,
+                    onBottomButtonClicked = changePageCallback,
+                    onLongClick = onLongCardClick
+                )
+            }
         is MainScreenState.Favourites ->
-            FavouriteScreen(
-                modifier = modifier
-                    .padding(top = 26.dp, bottom = 48.dp),
-                cards = (screenState as MainScreenState.Favourites).movies,
-                onSearchClicked = { },
-                onCardClicked = onCardClickedCallback,
-                onBottomButtonClicked = changePageCallback
-            )
+            Box(modifier = modifier.fillMaxSize()){
+                FavouriteScreen(
+                    modifier = modifier
+                        .padding(top = 26.dp, bottom = 48.dp),
+                    cards = (screenState as MainScreenState.Favourites).movies.filter { it.isFavourite },
+                    onSearchClicked = { },
+                    onCardClicked = onCardClickedCallback,
+                    onBottomButtonClicked = changePageCallback,
+                    onLongClick = onLongCardClick
+                )
+            }
         is MainScreenState.MovieInfo ->
             MovieDescription(
                 modifier = modifier.padding(bottom = 48.dp),

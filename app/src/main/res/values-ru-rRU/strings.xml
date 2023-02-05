@@ -8,4 +8,5 @@
     <string name="genres_title">Жанры</string>
     <string name="retry_text">Повторить</string>
     <string name="countries_title">Страны</string>
+    <string name="film_load_error">Не можем выбраться из Матрицы, пожалуйста, проверьте соединение с интернетом</string>
 </resources>

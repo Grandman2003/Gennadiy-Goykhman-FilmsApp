@@ -25,6 +25,7 @@ fun FavouriteScreen(
     cards: List<Movie>,
     onSearchClicked:() -> Unit,
     onCardClicked:(Movie) -> Unit,
+    onLongClick: (Movie) -> Unit,
     onBottomButtonClicked:(Screen) -> Unit
 ){
     MainScreen(
@@ -40,8 +41,8 @@ fun FavouriteScreen(
                     year = card.year,
                     image = BitmapPainter(card.image.asImageBitmap()),
                     isFavourite = card.isFavourite,
-                    onClicked = {onCardClicked(card)}) {
-                }
+                    onLongClicked = { onLongClick(card) },
+                    onClicked = {onCardClicked(card)})
                 Spacer(modifier = Modifier.height(12.dp))
             }
         }
@@ -55,6 +56,7 @@ fun FavouriteScreenPreview(){
         cards = MutableList(10){ SampleUiData.getMovieCard(LocalContext.current) },
         onSearchClicked = {  },
         onCardClicked = {},
+        onLongClick = {},
         onBottomButtonClicked = {}
     )
 }

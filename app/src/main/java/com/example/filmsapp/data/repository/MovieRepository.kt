@@ -16,7 +16,8 @@ import kotlin.coroutines.coroutineContext
 
 interface MovieRepository {
     fun getPopularFilms(): Flow<DataResult<List<Movie>>>
-    suspend fun getFilmInfo(oldMovie: Movie): Movie
+    suspend fun getFilmInfo(oldMovie: Movie): DataResult<Movie>
+    suspend fun changeFavouriteState(movie: Movie)
     suspend fun retryUpdate()
 }
 
@@ -39,16 +40,27 @@ class MovieRepositoryImpl @Inject constructor(
             }
 
 
-    override suspend fun getFilmInfo(oldMovie: Movie): Movie {
-        if (oldMovie.description.isNotBlank()) return CompletableDeferred(oldMovie).await()
-        return coroutineScope {
-            val result = async(Dispatchers.IO) {
-                val movie = movieApi.getFilmDescription(oldMovie.id).toMovieEntity(requestManager)
-                movieDao.updateMovie(movie)
-                movie.toMovie()
-            }
-            result
-        }.await()
+    override suspend fun getFilmInfo(oldMovie: Movie): DataResult<Movie> {
+        if (oldMovie.description.isNotBlank()) return DataResult.Success(CompletableDeferred(oldMovie).await())
+        return try {
+            DataResult.Success(coroutineScope {
+                val result = async(Dispatchers.IO) {
+                    val movie = movieApi.getFilmDescription(oldMovie.id).toMovieEntity(requestManager)
+                    movieDao.updateMovie(movie)
+                    movie.toMovie()
+                }
+                result
+            }.await())
+        } catch (e: Exception) {
+            e.printStackTrace()
+            DataResult.Error(message = e.localizedMessage ?: "")
+        }
+    }
+
+    override suspend fun changeFavouriteState(movie: Movie) {
+        val currentMovie = movieDao.getMovieById(movie.id)
+        currentMovie.isFavourite = if(currentMovie.isFavourite == 0) 1 else 0
+        movieDao.updateMovie(currentMovie)
     }
 
     override suspend fun retryUpdate() {
@@ -58,8 +70,13 @@ class MovieRepositoryImpl @Inject constructor(
     private suspend fun requestFilms(): UpdateState =
         when (val newFilms = updateFilms()) {
             is DataResult.Success -> {
+                val favMovies = movieDao.getAllMovies().first().filter { it.isFavourite ==1 }
                 movieDao.deleteTable()
-                movieDao.addMovie(movie = newFilms.data?.toTypedArray() ?: arrayOf())
+                val films = mutableListOf<MovieEntity>().apply {
+                    addAll(newFilms.data ?: emptyList())
+                    addAll(favMovies)
+                }
+                movieDao.addMovie(movie = films.toTypedArray())
                 UpdateState.Success
             }
             is DataResult.Error -> {
