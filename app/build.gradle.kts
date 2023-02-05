@@ -104,13 +104,6 @@ dependencies {
     implementation(libs.glide.core)
     kapt(libs.glide.compiler)
 
-    // Google Maps Location Services
-    implementation(libs.gms.location)
-    //implementation(libs.gms.maps)
-
-    //Yandex MapKit
-    implementation(libs.yandex.maps)
-
     // Dagger Core
     implementation(libs.dagger.core)
     kapt(libs.dagger.compiler)
@@ -130,9 +123,6 @@ dependencies {
     //Dagger Hilt Androidx
     kapt(libs.dagger.hilt.androidx.compiler)
 
-    // Easy Permissions
-    //implementation(libs.easypermissions)
-
     // Timber
     implementation(libs.timber)
 
@@ -144,9 +134,6 @@ dependencies {
 
     //Google Gson
     implementation(libs.gson)
-
-    //Android Security
-    implementation(libs.androidx.crypto)
 
     implementation(libs.android.arch.lifecycle)
 }

@@ -59,9 +59,15 @@ class MainActivity : ComponentActivity() {
                 ScreenHolder(
                     screenState = screenState,
                     changePageCallback = { screen -> viewModel.changePage(screen) },
-                    onCardClickedCallback = { card -> viewModel.showCardInfo(card)},
-                    onBackClicked = {screenFrom, current -> viewModel.navigateBackTo(screenFrom,current, this)},
-                    onLongCardClick = {card -> viewModel.changeFavourite(card)},
+                    onCardClickedCallback = { card -> viewModel.showCardInfo(card) },
+                    onBackClicked = { screenFrom, current ->
+                        viewModel.navigateBackTo(
+                            screenFrom,
+                            current,
+                            this
+                        )
+                    },
+                    onLongCardClick = { card -> viewModel.changeFavourite(card) },
                     onRetryClick = { viewModel.retryUpdate() }
                 )
             }
@@ -76,9 +82,9 @@ fun ScreenHolder(
     screenState: MainScreenState,
     changePageCallback: (Screen) -> Unit,
     onCardClickedCallback: (Movie) -> Unit,
-    onBackClicked: (from: Screen,current: Screen) -> Unit,
+    onBackClicked: (from: Screen, current: Screen) -> Unit,
     onLongCardClick: (Movie) -> Unit,
-    onRetryClick: () -> Unit  = {}
+    onRetryClick: () -> Unit = {}
 ) {
     AnimatedContent(
         targetState = screenState,
@@ -156,7 +162,7 @@ fun ScreenHolder(
                     PopularScreen(
                         modifier = modifier
                             .padding(top = 26.dp, bottom = 48.dp),
-                        cards = (screenState as MainScreenState.Popular).movies,
+                        cards = screenState.movies,
                         onSearchClicked = { },
                         onCardClicked = onCardClickedCallback,
                         onBottomButtonClicked = changePageCallback,
@@ -168,7 +174,7 @@ fun ScreenHolder(
                     FavouriteScreen(
                         modifier = modifier
                             .padding(top = 26.dp, bottom = 48.dp),
-                        cards = (screenState as MainScreenState.Favourites).movies.filter { it.isFavourite },
+                        cards = screenState.movies.filter { it.isFavourite },
                         onSearchClicked = { },
                         onCardClicked = onCardClickedCallback,
                         onBottomButtonClicked = changePageCallback,

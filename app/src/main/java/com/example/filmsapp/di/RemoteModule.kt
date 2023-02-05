@@ -38,5 +38,6 @@ object RemoteModule {
             .create(MovieApi::class.java)
 
     @Provides
-    fun provideGlideRequestManager(@ApplicationContext context: Context): RequestManager = Glide.with(context)
+    fun provideGlideRequestManager(@ApplicationContext context: Context): RequestManager =
+        Glide.with(context)
 }

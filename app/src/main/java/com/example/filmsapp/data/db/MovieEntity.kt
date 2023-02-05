@@ -13,7 +13,7 @@ data class MovieEntity(
     @ColumnInfo(name = "year") val year: Int,
     @ColumnInfo(name = "poster") val poster: ByteArray,
     @ColumnInfo(name = "description") val description: String? = "",
-    @ColumnInfo(name = "countries")  val countries: List<String>,
-    @ColumnInfo(name = "genres")  val genres: List<String>,
+    @ColumnInfo(name = "countries") val countries: List<String>,
+    @ColumnInfo(name = "genres") val genres: List<String>,
     @ColumnInfo(name = "favourite") var isFavourite: Int = 0
 )

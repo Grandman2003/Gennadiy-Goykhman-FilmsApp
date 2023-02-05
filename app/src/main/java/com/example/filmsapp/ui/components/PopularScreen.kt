@@ -23,18 +23,29 @@ import com.google.accompanist.drawablepainter.rememberDrawablePainter
 fun PopularScreen(
     modifier: Modifier = Modifier,
     cards: List<Movie>,
-    onSearchClicked:() -> Unit,
-    onCardClicked:(Movie) -> Unit,
+    onSearchClicked: () -> Unit,
+    onCardClicked: (Movie) -> Unit,
     onLongClick: (Movie) -> Unit = {},
-    onBottomButtonClicked:(Screen) -> Unit
-){
+    onBottomButtonClicked: (Screen) -> Unit
+) {
     MainScreen(
         modifier = modifier,
-        header = { MainHeader(title = stringResource(id = R.string.popular_title), onClicked = onSearchClicked)},
-        footer = {MainFooter(modifier = Modifier.padding(top = 10.dp), screen = Screen.Popular(), onClicked = onBottomButtonClicked)})
+        header = {
+            MainHeader(
+                title = stringResource(id = R.string.popular_title),
+                onClicked = onSearchClicked
+            )
+        },
+        footer = {
+            MainFooter(
+                modifier = Modifier.padding(top = 10.dp),
+                screen = Screen.Popular(),
+                onClicked = onBottomButtonClicked
+            )
+        })
     {
-        LazyColumn(modifier = Modifier.padding(top = 21.dp)){
-            items(cards){ card ->
+        LazyColumn(modifier = Modifier.padding(top = 21.dp)) {
+            items(cards) { card ->
                 MovieCard(
                     title = card.title,
                     genres = card.genres,
@@ -42,7 +53,7 @@ fun PopularScreen(
                     image = BitmapPainter(card.image.asImageBitmap()),
                     isFavourite = card.isFavourite,
                     onLongClicked = { onLongClick(card) },
-                    onClicked = {onCardClicked(card)},
+                    onClicked = { onCardClicked(card) },
                 )
                 Spacer(modifier = Modifier.height(12.dp))
             }
@@ -52,10 +63,10 @@ fun PopularScreen(
 
 @Preview
 @Composable
-fun PopularScreenPreview(){
+fun PopularScreenPreview() {
     PopularScreen(
-        cards = MutableList(10){ SampleUiData.getMovieCard(LocalContext.current) },
-        onSearchClicked = {  },
+        cards = MutableList(10) { SampleUiData.getMovieCard(LocalContext.current) },
+        onSearchClicked = { },
         onCardClicked = {},
         onLongClick = {},
         onBottomButtonClicked = {}

@@ -5,7 +5,7 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import retrofit2.Invocation
 
-class AuthInterceptor: Interceptor {
+class AuthInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val invocation: Invocation = chain.request().tag(Invocation::class.java)
             ?: return chain.proceed(chain.request())
@@ -14,7 +14,7 @@ class AuthInterceptor: Interceptor {
             .annotations
             .any { it.annotationClass == AuthToken::class }
 
-        return if(shouldAttachHeader){
+        return if (shouldAttachHeader) {
             chain.proceed(
                 chain.request()
                     .newBuilder()

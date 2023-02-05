@@ -1,7 +1,6 @@
 package com.example.filmsapp.ui.models
 
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 
 data class Movie(
     val id: Int,

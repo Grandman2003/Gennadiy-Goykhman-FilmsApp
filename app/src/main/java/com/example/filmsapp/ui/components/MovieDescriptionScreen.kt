@@ -38,15 +38,16 @@ fun MovieDescription(
     modifier: Modifier = Modifier,
     movie: Movie,
     navigatedFrom: Screen = Screen.Popular(),
-    onBackPressed:(from: Screen, current: Screen) -> Unit
-){
+    onBackPressed: (from: Screen, current: Screen) -> Unit
+) {
     val scrollState = rememberScrollState()
     BackHandler(
         enabled = true,
         onBack = { onBackPressed(navigatedFrom, Screen.Info(movie, navigatedFrom)) }
     )
-    Box(modifier = Modifier.fillMaxSize()
-    ){
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -58,9 +59,10 @@ fun MovieDescription(
                 contentDescription = "Film image",
                 contentScale = ContentScale.FillWidth
             )
-            Column(modifier = Modifier
-                .padding(top = 20.dp)
-                .padding(horizontal = 31.dp)
+            Column(
+                modifier = Modifier
+                    .padding(top = 20.dp)
+                    .padding(horizontal = 31.dp)
             ) {
                 Text(
                     text = movie.title,
@@ -77,9 +79,15 @@ fun MovieDescription(
                     fontSize = 14.sp
                 )
                 Spacer(modifier = Modifier.height(15.dp))
-                PointWithList(title = stringResource(id = R.string.genres_title), list = movie.genres)
+                PointWithList(
+                    title = stringResource(id = R.string.genres_title),
+                    list = movie.genres
+                )
                 Spacer(modifier = Modifier.height(8.dp))
-                PointWithList(title = stringResource(id = R.string.countries_title), list = movie.countries)
+                PointWithList(
+                    title = stringResource(id = R.string.countries_title),
+                    list = movie.countries
+                )
                 Spacer(modifier = Modifier.height(32.dp))
             }
         }
@@ -87,7 +95,7 @@ fun MovieDescription(
             modifier = Modifier
                 .offset(x = 6.dp, y = 40.dp)
                 .scale(1.2f),
-            onClick = { onBackPressed(navigatedFrom, Screen.Info(movie,navigatedFrom)) }
+            onClick = { onBackPressed(navigatedFrom, Screen.Info(movie, navigatedFrom)) }
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_back_arrow),
@@ -103,7 +111,7 @@ fun PointWithList(
     modifier: Modifier = Modifier,
     title: String,
     list: List<String>
-){
+) {
     Row(modifier = modifier.fillMaxWidth()) {
         Text(
             text = "$title: ",
@@ -124,9 +132,9 @@ fun PointWithList(
 
 @Preview(showBackground = true)
 @Composable
-fun MovieDescriptionPreview(){
-  MovieDescription(
-      movie = SampleUiData.getMovieCard(LocalContext.current),
-      onBackPressed = {_,_ ->}
-  )
+fun MovieDescriptionPreview() {
+    MovieDescription(
+        movie = SampleUiData.getMovieCard(LocalContext.current),
+        onBackPressed = { _, _ -> }
+    )
 }

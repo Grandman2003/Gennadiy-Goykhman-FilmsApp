@@ -63,7 +63,7 @@ fun MovieCard(
     onClicked: () -> Unit,
     onLongClicked: () -> Unit
 ) {
-    val genresText = genres.take(3).reduce { acc, s -> "$acc,$s"} + " ($year)"
+    val genresText = genres.take(3).reduce { acc, s -> "$acc,$s" } + " ($year)"
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -104,7 +104,7 @@ fun MovieCard(
                         fontWeight = FontWeight.Medium,
                         fontSize = 16.sp
                     )
-                    if(isFavourite){
+                    if (isFavourite) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_star),
                             tint = BackgroundBlue,
@@ -121,64 +121,63 @@ fun MovieCard(
                     fontSize = 12.sp
                 )
             }
-    }
+        }
 
-}
+    }
 }
 
 @Composable
 fun InfoDialog(
     modifier: Modifier = Modifier,
-    header: @Composable()() -> Unit,
+    header: @Composable() () -> Unit,
     onClose: () -> Unit = {},
     description: String,
     isClosable: Boolean,
-){
-        Dialog(
-            onDismissRequest = onClose,
-            properties = DialogProperties(
-                dismissOnBackPress = isClosable,
-                dismissOnClickOutside = isClosable
-            ),
-        ){
-            Box(
-                contentAlignment = Alignment.Center
-            ){
-                val config = LocalConfiguration.current
-                Card(
+) {
+    Dialog(
+        onDismissRequest = onClose,
+        properties = DialogProperties(
+            dismissOnBackPress = isClosable,
+            dismissOnClickOutside = isClosable
+        ),
+    ) {
+        Box(
+            contentAlignment = Alignment.Center
+        ) {
+            val config = LocalConfiguration.current
+            Card(
+                modifier = modifier
+                    .width((config.screenWidthDp * 0.8).toInt().dp)
+                    .height((config.screenWidthDp * 0.8).toInt().dp),
+                shape = RoundedCornerShape(percent = 10),
+                backgroundColor = Color.White
+            ) {
+                Column(
                     modifier = Modifier
-                        .width((config.screenWidthDp * 0.8).toInt().dp)
-                        .height((config.screenWidthDp * 0.8).toInt().dp)
-                    ,
-                    shape = RoundedCornerShape(percent = 10),
-                    backgroundColor = Color.White
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        header()
-                        Text(
-                            modifier = Modifier.padding(10.dp),
-                            text = description,
-                            fontFamily = FontFamily.Roboto,
-                            fontWeight = FontWeight.Medium,
-                            color = BackgroundBlue,
-                            fontSize = 16.sp,
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                    header()
+                    Text(
+                        modifier = Modifier.padding(10.dp),
+                        text = description,
+                        fontFamily = FontFamily.Roboto,
+                        fontWeight = FontWeight.Medium,
+                        color = BackgroundBlue,
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
         }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun InfoDialogPreview(){
+fun InfoDialogPreview() {
     InfoDialog(
         header = {
             Column(
@@ -194,8 +193,7 @@ fun InfoDialogPreview(){
                 BlueToggleButton(
                     modifier = Modifier
                         .wrapContentSize()
-                        .scale(0.8f)
-                    ,
+                        .scale(0.8f),
                     text = "Повторить",
                     onClicked = { },
                     isChoosen = false

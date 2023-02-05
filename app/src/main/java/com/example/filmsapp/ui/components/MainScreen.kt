@@ -22,18 +22,19 @@ import com.example.filmsapp.ui.theme.Roboto
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    header: @Composable()() -> Unit,
-    footer: @Composable()() -> Unit,
-    content: @Composable()() -> Unit,
-){
+    header: @Composable() () -> Unit,
+    footer: @Composable() () -> Unit,
+    content: @Composable() () -> Unit,
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .weight(1f)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(1f)
         ) {
             header()
             content()
@@ -47,7 +48,7 @@ fun MainHeader(
     modifier: Modifier = Modifier,
     title: String,
     onClicked: () -> Unit
-){
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -61,13 +62,6 @@ fun MainHeader(
             fontWeight = FontWeight.Medium,
             fontSize = 32.sp
         )
-        IconButton(onClick = onClicked) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_search),
-                tint = BackgroundBlue,
-                contentDescription = "search button",
-            )
-        }
     }
 }
 
@@ -76,10 +70,11 @@ fun MainFooter(
     modifier: Modifier = Modifier,
     screen: Screen,
     onClicked: (Screen) -> Unit
-){
-    Row(modifier = modifier
-        .fillMaxWidth()
-        .wrapContentHeight()
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
     ) {
         BlueToggleButton(
             modifier = Modifier
@@ -101,7 +96,7 @@ fun MainFooter(
 
 @Preview
 @Composable
-fun MainFooterPreview(){
+fun MainFooterPreview() {
     MainFooter(
         screen = Screen.Popular(),
         onClicked = {},
@@ -110,7 +105,7 @@ fun MainFooterPreview(){
 
 @Preview
 @Composable
-fun MainHeader(){
+fun MainHeader() {
     MainHeader(
         title = "Popular",
         onClicked = {}
@@ -118,11 +113,11 @@ fun MainHeader(){
 }
 
 sealed interface Screen {
-    data class Favourites(var fromInfo: Boolean = true): Screen
-    data class Popular(var fromInfo: Boolean = true): Screen
-    data class Loading(val from: Screen? = null): Screen
-    data class Error(val errorOnScreen: Screen = Loading()): Screen
-    data class Info(val movie: Movie, val from: Screen = Popular()): Screen
+    data class Favourites(var fromInfo: Boolean = true) : Screen
+    data class Popular(var fromInfo: Boolean = true) : Screen
+    data class Loading(val from: Screen? = null) : Screen
+    data class Error(val errorOnScreen: Screen = Loading()) : Screen
+    data class Info(val movie: Movie, val from: Screen = Popular()) : Screen
 }
 
 

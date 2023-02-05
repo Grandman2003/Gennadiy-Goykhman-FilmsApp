@@ -11,7 +11,7 @@ class Converters {
 
     @TypeConverter
     fun countriesToString(countries: List<String>): String =
-        gson.toJson(Container(countries),Container::class.java)
+        gson.toJson(Container(countries), Container::class.java)
 
     @TypeConverter
     fun fromStringToCountry(string: String): List<String> =

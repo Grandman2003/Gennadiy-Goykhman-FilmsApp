@@ -31,21 +31,26 @@ class MovieRepositoryImpl @Inject constructor(
         movieDao
             .getAllMovies()
             .map { it.map { entity -> entity.toMovie() } }
-            .combineTransform(flow { emit(requestFilms()) }){ movies, updateState ->
-                if(movies.isEmpty() && updateState is UpdateState.Error){
+            .combineTransform(flow { emit(requestFilms()) }) { movies, updateState ->
+                if (movies.isEmpty() && updateState is UpdateState.Error) {
                     emit(DataResult.Error(message = "Unable to update movies"))
-                } else if (movies.isNotEmpty()){
+                } else if (movies.isNotEmpty()) {
                     emit(DataResult.Success(movies))
                 }
             }
 
 
     override suspend fun getFilmInfo(oldMovie: Movie): DataResult<Movie> {
-        if (oldMovie.description.isNotBlank()) return DataResult.Success(CompletableDeferred(oldMovie).await())
+        if (oldMovie.description.isNotBlank()) return DataResult.Success(
+            CompletableDeferred(
+                oldMovie
+            ).await()
+        )
         return try {
             DataResult.Success(coroutineScope {
                 val result = async(Dispatchers.IO) {
-                    val movie = movieApi.getFilmDescription(oldMovie.id).toMovieEntity(requestManager)
+                    val movie =
+                        movieApi.getFilmDescription(oldMovie.id).toMovieEntity(requestManager)
                     movieDao.updateMovie(movie)
                     movie.toMovie()
                 }
@@ -59,7 +64,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun changeFavouriteState(movie: Movie) {
         val currentMovie = movieDao.getMovieById(movie.id)
-        currentMovie.isFavourite = if(currentMovie.isFavourite == 0) 1 else 0
+        currentMovie.isFavourite = if (currentMovie.isFavourite == 0) 1 else 0
         movieDao.updateMovie(currentMovie)
     }
 
@@ -70,7 +75,7 @@ class MovieRepositoryImpl @Inject constructor(
     private suspend fun requestFilms(): UpdateState =
         when (val newFilms = updateFilms()) {
             is DataResult.Success -> {
-                val favMovies = movieDao.getAllMovies().first().filter { it.isFavourite ==1 }
+                val favMovies = movieDao.getAllMovies().first().filter { it.isFavourite == 1 }
                 movieDao.deleteTable()
                 val films = mutableListOf<MovieEntity>().apply {
                     addAll(newFilms.data ?: emptyList())
@@ -85,7 +90,7 @@ class MovieRepositoryImpl @Inject constructor(
         }
 
     private suspend fun updateFilms(): DataResult<List<MovieEntity>> =
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             try {
                 DataResult.Success(
                     movieApi.getTopMovies().films.map { dto ->
